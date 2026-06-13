@@ -2,11 +2,25 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+type ExchangeInfo = {
+  to: string;
+  from: string;
+  amount: number;
+  rate: number;
+  result: number;
+};
+
 type CurrencyState = {
   baseCurrency: string;
   hasHydrated: boolean;
+  exchangeInfo: ExchangeInfo | null;
+  isLoading: boolean;
+  isError: null | string;
   setBaseCurrency: (currency: string) => void;
   setHasHydrated: (stateHydrated: boolean) => void;
+  setExchangeInfo: (info: null | ExchangeInfo) => void;
+  setisLoading: (loading: boolean) => void;
+  setisError: (error: null | string) => void;
 };
 
 export const useCurrencyStore = create<CurrencyState>()(
@@ -14,6 +28,11 @@ export const useCurrencyStore = create<CurrencyState>()(
     (set) => ({
       baseCurrency: '',
       hasHydrated: false,
+
+      exchangeInfo: null,
+      isLoading: false,
+      isError: null,
+
       setBaseCurrency: (currency) =>
         set({
           baseCurrency: currency,
@@ -21,6 +40,18 @@ export const useCurrencyStore = create<CurrencyState>()(
       setHasHydrated: (stateHydrated) =>
         set({
           hasHydrated: stateHydrated,
+        }),
+      setExchangeInfo: (info) =>
+        set({
+          exchangeInfo: info,
+        }),
+      setisLoading: (loading) =>
+        set({
+          isLoading: loading,
+        }),
+      setisError: (error) =>
+        set({
+          isError: error,
         }),
     }),
     {
